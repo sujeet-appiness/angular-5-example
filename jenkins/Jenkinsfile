@@ -7,7 +7,7 @@ pipeline{
       }
     }
     stage ('install modules'){
-      steps ('nodejs'){
+      nodejs ('nodejs'){
         sh '''
           npm install --verbose -d 
           npm install --save classlist.js
@@ -15,7 +15,7 @@ pipeline{
       }
     }
     stage ('test'){
-      steps ('nodejs') {
+      nodejs ('nodejs') {
         sh '''
           $(npm bin)/ng test --single-run --browsers Chrome_no_sandbox
         '''
@@ -27,17 +27,17 @@ pipeline{
       }
     }
     stage ('code quality'){
-      steps ('nodejs') {
+      nodejs ('nodejs') {
         sh '$(npm bin)/ng lint'
       }
     }
     stage ('build') {
-      steps ('nodejs') {
+      nodejs ('nodejs') {
         sh '$(npm bin)/ng build --prod --build-optimizer'
       }
     }
     stage ('build image') {
-      steps ('nodejs') {
+      nodejs ('nodejs') {
         sh '''
           rm -rf node_modules
           oc start-build angular-5-example --from-dir=. --follow
